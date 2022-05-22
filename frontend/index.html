@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <title>Music page</title>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+        body {
+            background: rgb(236, 126, 203);
+            color: yellow;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container pt-3" id="app" v-cloak>
+        <h1>Music page</h1>
+
+        <form class="form-inline mb-3" @submit.prevent>
+            <div class="form-group mr-5">
+                <label for="name" class="mr-3">ArtistName</label>
+                <input type="text" class="form-control" placeholder="Artist name" id="artistName"
+                    v-model="artist.artistName">
+            </div>
+            <div class="form-group mr-5">
+                <button class="btn btn-primary" @click="createContent()" :disabled="!canCreate">Create content</button>
+            </div>
+            <div class="form-group mr-5">
+                <button class="btn btn-primary" @click="refreshYears()">Refresh years</button>
+            </div>
+            <label for="name" class="mr-3">Albums:</label>
+            <label for="name" class="mr-3"><strong>{{album_count}}</strong></label>
+            <label for="name" class="mr-3">Tracks:</label>
+            <label for="name" class="mr-3"><strong>{{track_count}}</strong></label>
+            <label for="name" class="mr-3">{{status_message}}</label>
+        </form>
+        <form class="form-inline mb-3" @submit.prevent>
+            <div class="" v-for="year in years">
+                <div class="form-group">
+                    <button class="btn" @click="updateContent(year.year)">{{year.year}}</button>
+                </div>
+            </div>
+        </form>
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-tracks-tab" data-toggle="tab" href="#nav-tracks" role="tab"
+                    aria-controls="nav-tracks" aria-selected="true">Tracks</a>
+                <a class="nav-item nav-link" id="nav-albums-tab" data-toggle="tab" href="#nav-albums" role="tab"
+                    aria-controls="nav-albums" aria-selected="false">Albums</a>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent" @submit.prevent>
+            <div class="tab-pane fade show active" id="nav-tracks" role="tabpanel" aria-labelledby="nav-tracks-tab">
+                <div v-if="tracks.length">
+                    <div class="row mb-1 bg-dark text-white">
+                        <div class="col-md-6 themed-grid-col">trackName</div>
+                        <div class="col-md-5 themed-grid-col">collectionName</div>
+                        <div class="col-md-1 themed-grid-col">track Num/ Count</div>
+                        <div class="col-md-1 themed-grid-col">trackId</div>
+                        <div class="col-md-1 themed-grid-col">wrapperType</div>
+                        <div class="col-md-1 themed-grid-col">kind</div>
+                        <div class="col-md-1 themed-grid-col">Track/ coll Price</div>
+                        <div class="col-md-1 themed-grid-col">collectionId</div>
+                        <div class="col-md-1 themed-grid-col">Genre</div>
+                        <div class="col-md-1 themed-grid-col">artistId</div>
+                        <div class="col-md-3 themed-grid-col">releaseDate</div>
+                        <div class="col-md-2 themed-grid-col">artistName</div>
+                    </div>
+                    <div v-for="track in tracks">
+                        <div class="row mb-1 bg-light text-dark">
+                            <div class="col-md-6 themed-grid-col"><strong>{{ track.trackName }}</strong></div>
+                            <!-- trackName -->
+                            <div class="col-md-5 themed-grid-col">{{ track.collectionName }}</div>
+                            <!-- collectionName -->
+                            <div class="col-md-1 themed-grid-col">{{ track.trackNumber }}/{{ track.trackCount }}</div>
+                            <!-- trackNumber -->
+                            <div class="col-md-1 themed-grid-col">{{ track.trackId }}</div><!-- trackId -->
+                            <div class="col-md-1 themed-grid-col">{{ track.wrapperType }}</div><!--  wrapperType -->
+                            <div class="col-md-1 themed-grid-col">{{ track.kind }}</div><!-- kind -->
+                            <div class="col-md-1 themed-grid-col">{{ track.trackPrice }}/{{ track.collectionPrice }}
+                            </div>
+                            <!-- trackPrice -->
+                            <div class="col-md-1 themed-grid-col">{{ track.collectionId }}</div><!-- collectionId -->
+                            <div class="col-md-1 themed-grid-col">{{ track.primaryGenreName }}</div>
+                            <!-- primaryGenreName -->
+                            <div class="col-md-1 themed-grid-col">{{ track.artistId }}</div><!-- artistId -->
+                            <div class="col-md-3 themed-grid-col">{{ track.releaseDate }}</div><!-- releaseDate -->
+                            <div class="col-md-2 themed-grid-col">{{ track.artistName }}</div><!-- artistName -->
+                        </div>
+                    </div>
+                </div>
+                <p v-else>Nothing.</p>
+            </div>
+            <div class="tab-pane fade" id="nav-albums" role="tabpanel" aria-labelledby="nav-albums-tab">
+                <div v-if="albums.length">
+                    <div class="row mb-1 bg-dark text-white">
+                        <div class="col-md-1 themed-grid-col">artist Id</div>
+                        <div class="col-md-1 themed-grid-col">collection Id</div>
+                        <div class="col-md-5 themed-grid-col">collectionName</div>
+                        <div class="col-md-1 themed-grid-col">collection Price</div>
+                        <div class="col-md-1 themed-grid-col">track Count</div>
+                        <div class="col-md-2 themed-grid-col">release Date</div>
+                        <div class="col-md-1 themed-grid-col">primary Genre Name</div>
+                    </div>
+                    <div v-for="album in albums">
+                        <div class="row mb-1 bg-light text-dark">
+                            <div class="col-md-1 themed-grid-col">{{ album.artistId }}</div>
+                            <div class="col-md-1 themed-grid-col">{{ album.collectionId }}</div>
+                            <div class="col-md-5 themed-grid-col">{{ album.collectionName }}</div>
+                            <div class="col-md-1 themed-grid-col">{{ album.collectionPrice }}</div>
+                            <div class="col-md-1 themed-grid-col">{{ album.trackCount }}</div>
+                            <div class="col-md-2 themed-grid-col">{{ album.releaseDate }}</div>
+                            <div class="col-md-1 themed-grid-col">{{ album.primaryGenreName }}</div>
+                        </div>
+                    </div>
+                </div>
+                <p v-else>Nothing.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="module" src="frontend.js"></script>
+    <footer class="container pt-4 my-md-5 pt-md-5 border-top">
+        <div class="row">
+            <div class="col-12 col-md">
+                <small class="d-block mb-3 text-muted">© 2022</small>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

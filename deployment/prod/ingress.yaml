@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  creationTimestamp: null
+  name: ingress-prod
+  namespace: prod
+spec:
+  rules:
+  - host: prod.test.edc-electronics.ru
+    http:
+      paths:
+      - backend:
+          service:
+            name: service-frontend
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+      - backend:
+          service:
+            name: service-backend
+            port:
+              number: 5000
+        path: /music_page/api
+        pathType: Prefix
+status:
+  loadBalancer: {}

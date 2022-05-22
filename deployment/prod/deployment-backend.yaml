@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: deploy-backend
+  name: deploy-backend
+spec:
+  #replicas: 1
+  selector:
+    matchLabels:
+      app: deploy-backend
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: deploy-backend
+    spec:
+      containers:
+      - image: registry.gitlab.com/somerek/music_page/backend:latest
+        name: backend
+        ports:
+        - containerPort: 5000
+        resources:
+          requests:
+            cpu: 400m
+        livenessProbe:
+          tcpSocket:
+            port: 5000
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          tcpSocket:
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        imagePullPolicy: Always
+        env:
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: secret-backend
+                key: DB_USER
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: secret-backend
+                key: DB_PASSWORD
+          - name: DB_NAME
+            valueFrom:
+              secretKeyRef:
+                name: secret-backend
+                key: DB_NAME
+          - name: SERVICE_DB_SERVICE_HOST
+            valueFrom:
+              secretKeyRef:
+                name: secret-backend
+                key: SERVICE_DB_SERVICE_HOST
+status: {}

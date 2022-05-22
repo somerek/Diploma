@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: deploy-frontend
+  name: deploy-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deploy-frontend
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: deploy-frontend
+    spec:
+      containers:
+      - image: registry.gitlab.com/somerek/music_page/frontend:latest
+        name: frontend
+        ports:
+        - containerPort: 80
+        resources: {}
+status: {}
